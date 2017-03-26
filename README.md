@@ -8,9 +8,9 @@ Enjoy.
 
 ### Basic usage
 
-'''
-python3 hidemymadness.py -e -t www.gazzetta.it
-'''
+```
+python3 hidemymadness.py -e -t <url>
+```
 
 ### Author
 
