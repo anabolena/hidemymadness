@@ -2,7 +2,7 @@
 
 - Extract Hidemyass.com proxy list (bypassing CSS obfuscation)
 - Test proxies in 3 different ways
-- Save result in csv files
+- Save results in a csv file
 
 Enjoy.
 

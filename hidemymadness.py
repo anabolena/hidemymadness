@@ -192,6 +192,8 @@ def test_proxies(args, list_proxies):
             if method == 'TRACE':
                 if can_i_try_trace and trace_headers:
                     print(final_message, trace_message, trace_headers, sep="\n")
+                elif can_i_try_trace and not trace_headers:
+                    print(final_message)
             else:
                 print(final_message)
 
