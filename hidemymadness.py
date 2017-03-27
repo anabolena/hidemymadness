@@ -234,7 +234,7 @@ def connect_or_trace_attempts(args, proxy, method):
         status_code = received[9:12]
     else:
         status_code = '---'
-    return status_code, receivedre.findall(regexpan, td)[0]
+    return status_code, received
 
 
 def extract_proxy_list(args):
@@ -350,7 +350,7 @@ def extract_proxy_list(args):
         print("No proxy extracted...???")
         exit(1)
     for proxy in list_proxies:
-        print("IP-{ip} PORT-{port} N-{nation}".format(**proxy))
+        print("IP-{ip} PORT-{port} N-{nation} ({anonimity})".format(**proxy))
 
     print("Extracted {} proxies!".format(len(list_proxies)))
     return list_proxies
