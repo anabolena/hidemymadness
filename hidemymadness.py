@@ -1,20 +1,27 @@
+'''
+    Hidemymadness.py
+    by Matteo Lodi
+'''
 import re
 import csv
 import argparse
 import time
 import socket
 import traceback
-from ipaddress import IPv4Address, AddressValueError
 import requests
+from ipaddress import IPv4Address, AddressValueError
 from requests.exceptions import ProxyError, Timeout
 from pathlib import Path
 from bs4 import BeautifulSoup
 
 
 def main():
+    '''
+        main function
+    '''
     description = ('Extract Hidemyass.com proxy list and export it in a csv file\n'
-                'Test proxies found and select the usable ones\n'
-                'by Matteo Lodi')
+                   'Test proxies found and select the usable ones\n'
+                   'by Matteo Lodi')
     parser = argparse.ArgumentParser(description=description, \
                                      formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-e', '--extract', action='store_true', \
@@ -29,7 +36,7 @@ def main():
     parser.add_argument('-C', '--tcsv', action='store_true', \
                         help='export tested proxies in a csv file'
                         ' (default:"usable_proxy_list_hidemyass.csv")')
-    parser.add_argument( '-o', '--outecsv',dest='export_ecsv', \
+    parser.add_argument('-o', '--outecsv', dest='export_ecsv', \
                         help='csv file name to export extracted proxies',
                         default='proxy_list_hidemyass.csv')
     parser.add_argument('-O', '--outtcsv', dest='export_tcsv', \
@@ -65,6 +72,9 @@ def main():
 
 
 def test_proxies(args, list_proxies):
+    '''
+        Test proxies with different methods
+    '''
     # if i used extract method, i test proxies just found
     if hasattr(args, 'extract') and args.extract:
         proxies_to_test = list_proxies
@@ -178,7 +188,7 @@ def test_proxies(args, list_proxies):
             except ConnectionResetError:
                 status_code = 'CONRESET'
                 is_proxy_usable = False
-            except Exception as err:
+            except Exception:
                 if args.debug: print(traceback.print_exc())
                 status_code = 'GENERR'
                 is_proxy_usable = False
@@ -191,7 +201,7 @@ def test_proxies(args, list_proxies):
                 'method': method
             }
             final_message = ("{status_code} {message} {timestamp}s"
-                            " - HTTP {method}".format(**dict_format))
+                             " - HTTP {method}".format(**dict_format))
             if method == 'TRACE':
                 if can_i_try_trace and trace_headers:
                     print(final_message, trace_message, trace_headers, sep="\n")
@@ -209,6 +219,9 @@ def test_proxies(args, list_proxies):
 
 
 def connect_or_trace_attempts(args, proxy, method):
+    '''
+        This method attempts TRACE or CONNECT HTTP method
+    '''
     # open tcp connection
     sock = socket.create_connection((proxy['ip'], proxy['port']),\
                                     timeout=10)
@@ -238,6 +251,9 @@ def connect_or_trace_attempts(args, proxy, method):
 
 
 def extract_proxy_list(args):
+    '''
+        Extract proxy list from hidemyass.com
+    '''
     print("Extraction running....")
     list_proxies = []
     page = 0
@@ -357,6 +373,9 @@ def extract_proxy_list(args):
 
 
 def export_csv_file(args, type, list_proxies):
+    '''
+        export results in a csv file
+    '''
     if type == "test":
         filename = args.export_tcsv
         message = "Usable"
