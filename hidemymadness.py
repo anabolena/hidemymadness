@@ -10,6 +10,7 @@ from requests.exceptions import ProxyError, Timeout
 from pathlib import Path
 from bs4 import BeautifulSoup
 
+
 def main():
     description = ('Extract Hidemyass.com proxy list and export it in a csv file\n'
                 'Test proxies found and select the usable ones\n'
@@ -83,7 +84,8 @@ def test_proxies(args, list_proxies):
                 ip = list_values[0]
                 port = list_values[1]
                 nation = list_values[2]
-                el = {'ip': ip, 'port': port, 'nation': nation}
+                anonimity = list_values[3]
+                el = {'ip': ip, 'port': port, 'nation': nation, 'anonimity': anonimity}
                 proxies_to_test.append(el)
         if not proxies_to_test:
             print("No proxies extracted from {}. \
@@ -232,7 +234,7 @@ def connect_or_trace_attempts(args, proxy, method):
         status_code = received[9:12]
     else:
         status_code = '---'
-    return status_code, received
+    return status_code, receivedre.findall(regexpan, td)[0]
 
 
 def extract_proxy_list(args):
