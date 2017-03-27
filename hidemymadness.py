@@ -107,12 +107,13 @@ def test_proxies(args, list_proxies):
         exit(1)
     print("OK")
 
+    print("BEWARE! TEST RESULTS MAY CHANGE ACCORDING TO THE CHOSEN SITE URL")
     # now test proxies
     usables_proxies = []
     print("{}".format(info))
     for proxy in proxies_to_test:
         print("-"*30)
-        print("Testing {ip} {port} {nation}...".format(**proxy))
+        print("Testing {ip} {port} {nation} ({anonimity})...".format(**proxy))
         proxy_url = {'http': "http://{ip}:{port}".format(**proxy)}
         is_proxy_usable = True
         can_i_try_trace = False
@@ -327,8 +328,13 @@ def extract_proxy_list(args):
                     regexpnat = re.compile('<img.*?>\s*(.*?)\s*</span>')
                     nation = re.findall(regexpnat, td)[0]
 
+                # seventh column: anonimity level
+                if col == 7:
+                    anonimity = re.sub(regexp, '', td).split()[0]
+
+
             #save the found proxy
-            el = {'ip': ip, 'port': port, 'nation': nation}
+            el = {'ip': ip, 'port': port, 'nation': nation, 'anonimity': anonimity}
             list_proxies.append(el)
             proxies_extracted_this_page += 1
 
@@ -358,7 +364,8 @@ def export_csv_file(args, type, list_proxies):
     with open(filename, 'w') as f:
         wr = csv.writer(f)
         for proxy in list_proxies:
-            wr.writerow([proxy['ip'], proxy['port'], proxy['nation']])
+            wr.writerow([proxy['ip'], proxy['port'], proxy['nation'],\
+                         proxy['anonimity']])
     print("{} proxy list exported in file named {}".format(message, filename))
 
 
